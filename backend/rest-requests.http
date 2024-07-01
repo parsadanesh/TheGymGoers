@@ -1,0 +1,15 @@
+GET http://localhost:3000/auth
+
+
+###
+
+POST http://localhost:3000/login
+content-type: application/json
+
+{
+
+            "email": "test-email2@domain.com",
+            "password": "testpass2"
+}
+
+###

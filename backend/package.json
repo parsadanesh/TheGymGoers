@@ -1,0 +1,35 @@
+{
+  "name": "challenge-6-full-stack-capstone-project-parsadanesh",
+  "version": "1.0.0",
+  "description": "[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/nadfrmGX)\r [![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=15265463&assignment_repo_type=AssignmentRepo)\r # Challenge 6 - Full-Stack Capstone Project",
+  "main": "index.js",
+  "type": "module",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "prod": "NODE_ENV=prod nodemon src/index.js",
+    "start": "SET NODE_ENV=dev&&nodemon src/index.js",
+    "test": "NODE_ENV=test mocha --timeout 10000 --exit --recursive",
+    "test-win": "SET NODE_ENV=test&&mocha --timeout 5000 --exit --recursive",
+    "coverage": "NODE_ENV=test c8 -r html npm test",
+    "coverage-win": "SET NODE_ENV=test&&c8 -r html npm run test-win"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.1.0",
+    "mongodb": "^6.7.0",
+    "mongoose": "^8.4.1"
+  },
+  "devDependencies": {
+    "c8": "^9.1.0",
+    "chai": "^5.1.1",
+    "mocha": "^10.4.0",
+    "sinon": "^18.0.0",
+    "supertest": "^7.0.0"
+  }
+}
