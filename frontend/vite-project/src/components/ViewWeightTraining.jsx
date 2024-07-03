@@ -9,7 +9,6 @@ const ViewWeightTraining = (props) => {
     //these exercises are mapped to each workout 
     //each indiviudal workout will be displayed
     
-    const date = props.date;
     const name = props.name;
     const reps = props.reps;
     const sets = props.sets;
@@ -24,7 +23,6 @@ const ViewWeightTraining = (props) => {
                 <li className="list-group-item">Reps: <strong>{reps}</strong></li>
                 <li className="list-group-item">Sets: <strong>{sets}</strong></li>
                 <li className="list-group-item">Weight (kg): <strong>{weight}</strong></li>
-                <li className="list-group-item"><strong>{date}</strong></li>
             </ul>
 
         

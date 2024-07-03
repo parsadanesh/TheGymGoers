@@ -30,7 +30,7 @@ function App() {
 
   const registerUser = async (e) => {
     try {
-      const res = await axios.post("http://localhost:3000/addUser", newUser);
+      const res = await axios.post(`${import.meta.env.VITE_APP_GYMBACKEND}/addUser`, newUser);
       if (res.status === 200) console.log("User Registered");
     } catch (e) {
       console.log(e.response.data.message);
@@ -40,7 +40,7 @@ function App() {
 
   const sendLogin = async (e) => {
       try {
-        const res = await axios.post("http://localhost:3000/login", user);
+        const res = await axios.post(`${import.meta.env.VITE_APP_GYMBACKEND}/login`, user);
         if (res.status === 200) setLoggedIn(true);
       } catch (e) {
         console.log(e.response.data.message);

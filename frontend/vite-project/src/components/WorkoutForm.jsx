@@ -19,7 +19,7 @@ const WorkoutForm = (props) => {
     
     const logWorkout = async (e) => {
         try {
-            const res = await axios.post("http://localhost:3000/logWorkout", { existingUser: props.user, workoutDetails: workout });
+            const res = await axios.post(`${import.meta.env.VITE_APP_GYMBACKEND}/logWorkout`, { existingUser: props.user, workoutDetails: workout });
             if (res.status === 201) console.log("success");
         } catch (e) {
                 if (e.response && e.response.data) {
@@ -47,6 +47,14 @@ const WorkoutForm = (props) => {
         }
 
     }, [weightTraining]);
+
+    useEffect(() => {
+        if (cardioTraining.name || weightTraining.duration ) {
+            // arr.push(weightTraining);
+            setExercises(prevWorkout => [...prevWorkout, cardioTraining]);
+        }
+
+    }, [cardioTraining]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
