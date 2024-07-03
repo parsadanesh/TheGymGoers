@@ -5,13 +5,22 @@ const CardioTraining = (props) => {
 
     const handleDurationChange = (e) => setDurationRef(e.target.value);
 
-    const submitDuration = () => {
-        props.setDuration(durationRef);
+    const submitExercise = (e) => {
+        e.preventDefault();
+
+        if (props.selectedOptionText && durationRef) {
+            props.setCardioTraining({
+                name: props.selectedOptionText,
+                duration: durationRef
+            });
+        }
+        setDurationRef("")
+
     }
 
 
     return (
-        <form onSubmit={submitDuration}>
+        <form onSubmit={submitExercise}>
             <div className="form-row d-flex flex-column align-items-center mt-3">
                 <div className="form-group col-md-4 mt-3">
                     <label className="fw-bold" htmlFor="inputTime4">Time</label>

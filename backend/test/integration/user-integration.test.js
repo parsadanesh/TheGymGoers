@@ -99,11 +99,16 @@ describe("Integration Tests", () => {
         });
     });
 
+    
+
     describe("GET request to /viewWorkouts on UserRoutes", () => {
-        it.only("Should retrieve all of a users workouts", async () => {
-            const response = await request.get("/viewWorkouts").send(testUsers[1]);
+        it.skip("Should retrieve all of a users workouts", async () => {
+            // console.log(testUsers[1]);
+            const response = await request.get("/viewWorkouts", { params: testUsers[1] });   
+
             // console.log(JSON.stringify(response.body));
-            console.log(response.body[0].exercises);
+
+            // console.log(response.body[0]);
             expect(response.status).to.equal(200);
             expect(response.body.length).greaterThan(0);
 

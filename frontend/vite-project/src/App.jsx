@@ -11,9 +11,9 @@ import WorkoutForm from './components/WorkoutForm';
 import ViewWorkout from './pages/ViewWorkouts';
 
 function App() {
-  const [user, setUser] = useState({ email: "", password: "", });
-  const [newUser, setNewUser] = useState({ email: "", password: "", });
   const [loggedIn, setLoggedIn] = useState(false);
+  const [newUser, setNewUser] = useState({ email: "", password: "", });
+  const [user, setUser] = useState({ email: "", password: "", });
 
   useEffect(() => {
     if (user.email !== "" || user.password !== "") {
@@ -51,7 +51,7 @@ function App() {
   return (
     <div className='container d-flex flex-column' style={{ width: '100%', height: '100vh' }}>
       {/* <WorkoutForm user={user} /> */}
-      <Header loggedIn={loggedIn} />
+      <Header loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
       {loggedIn && (
         <Routes>
           <Route path="/log" element={<WorkoutForm user={user} />} />

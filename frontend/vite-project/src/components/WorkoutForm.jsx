@@ -10,30 +10,31 @@ const WorkoutForm = (props) => {
 
     const [selectedExercise, setSelectedExercise] = useState(null);
     const [selectedOptionText, setSelectedOptionText] = useState("");
-    const [duration, setDuration] = useState(null);
     const [workout, setWorkout] = useState({ exercises: [] });
     const [exercises, setExercises] = useState([]);
     const [workRef, setWorkRef] = useState(false);
-
+    const [successMessage, setSuccessMessage] = useState(''); 
+    const [cardioTraining, setCardioTraining] = useState({ name: "", duration: "" });
     const [weightTraining, setWeightTraining] = useState({ name: "", reps: "", sets: "", weight: "" });
     
     const logWorkout = async (e) => {
         try {
             const res = await axios.post("http://localhost:3000/logWorkout", { existingUser: props.user, workoutDetails: workout });
-            if (res.status === 201) console.log("Workout Registered");
+            if (res.status === 201) console.log("success");
         } catch (e) {
-            console.log(e.response.data.message);
+                if (e.response && e.response.data) {
+                    console.log(e.response.data.message);
+                } else {
+                    // Handle the error without a response (e.g., network error, or request was not sent)
+                    console.log(e.message);
+    }
         }
     }
     
-
-    // EXERICE = type, (reps, sets, weight, duration) - these are optional depends on the type
-
     //method that created a new workout using the states
     useEffect(() => {
         if (exercises.length > 0) {
             setWorkRef(true);
-            console.log(exercises);
         }
         
     }, [exercises])
@@ -45,22 +46,29 @@ const WorkoutForm = (props) => {
             setExercises(prevWorkout => [...prevWorkout, weightTraining]);
         }
 
-
-
-
-
     }, [weightTraining]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setWorkout({ exercises: exercises });
 
-        logWorkout();
-
+        setSuccessMessage('Your workout has been successfully submitted!');
+        
+        setTimeout(() => {
+            setSuccessMessage('');
+        }, 3000);
 
     }
 
+    useEffect(() => {
+        logWorkout();
+
+ 
+        
+    }, [workout])
+
     const handleExerciseChange = (e) => {
+        e.preventDefault();
         setSelectedOptionText(e.target.options[e.target.selectedIndex].text);
         setSelectedExercise(Number(event.target.value));
     }
@@ -93,16 +101,18 @@ const WorkoutForm = (props) => {
             <button type="submit" className="btn btn-primary mt-3" disabled={!workRef}>Add a new workout</button>
 
             </form>
-
+            {successMessage && <div className="alert alert-success mt-3">{successMessage}</div>}
         
             {selectedExercise === 1 &&
                 // <h1>HI</h1>
-                <CardioTraining setDuration={setDuration} />
+                <CardioTraining selectedOptionText={selectedOptionText} setCardioTraining={setCardioTraining} />
             }
 
             {selectedExercise === 0 &&
                 <WeightTraining selectedOptionText={selectedOptionText} setWeightTraining={setWeightTraining} />
-                }
+            }
+            
+
                 
             
 

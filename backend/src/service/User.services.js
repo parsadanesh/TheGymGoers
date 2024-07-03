@@ -14,7 +14,6 @@ export default class UserService {
         try {
             user = new User(newUser);
         } catch (e) {
-           
             throw new Error("Invalid Details");
         }
         return await user.save();
@@ -34,21 +33,11 @@ export default class UserService {
     async addWorkout(existingUser, workoutDetails) {
 
         try {
-
-          
-
             const user = await User.findOne({ email: existingUser.email });
-
-            
-
             if (!user) {
                 throw new Error("User not found");
             }
-
             user.workouts.push(workoutDetails);
-
-            // console.log(user);
-
             await user.save();
 
             return user;
@@ -56,20 +45,18 @@ export default class UserService {
         } catch (e) {
             console.log(e.message);
             throw new Error(e.message);
-
-        
         }
         
-    }
+    };
 
     async getWorkouts(userToFind) {
         try {
             const user = await User.findOne({ email: userToFind });
-            // console.log(user.workouts);
+            // console.log(userToFind);
         
             return user.workouts;
         } catch (e) {
             console.log(e.message);
         }
-    }
+    };
 }

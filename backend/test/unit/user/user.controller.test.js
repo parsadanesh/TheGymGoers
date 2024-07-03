@@ -2,6 +2,7 @@ import { expect } from "chai";
 import sinon from "sinon";
 import UserController from "../../../src/controllers/User.controller.js";
 import UserService from "../../../src/service/User.services.js";
+import { body } from "express-validator";
 
 describe("UserController", () => {
     let userController;
@@ -23,13 +24,15 @@ describe("UserController", () => {
         userServices = {
             addUser: sinon.stub(),
             login: sinon.stub(),
+            addWorkout: sinon.stub(),
+            getWorkouts: sinon.stub()
         };
         userController = new UserController(userServices)
 
     })
 
 
-    describe.skip("add a new user", () => {
+    describe("add a new user", () => {
 
         it("should add a new user", async () => {
             // Arrange
@@ -77,7 +80,7 @@ describe("UserController", () => {
 
     });
 
-    describe.skip("login a user", () => {
+    describe("login a user", () => {
 
         it("should login a user with valid details", async () => {
             // Arrange
@@ -97,5 +100,133 @@ describe("UserController", () => {
 
     });
 
+    describe("Add a workout as a user", () => {
+        let existingUser = { 
+            email: 'testUser@email.com', password: 'testPass' ,
+        };
+        
+        const testWorkout = {
+            exercises: [{
+                name: "Squat",
+                reps: 10,
+                sets: 3,
+                weight: 60
+            }, {
+                name: "Bench",
+                reps: 10,
+                sets: 4,
+                weight: 50
+            }]
+        };
+        
+
+
+        it("should add a workout to a user", async () => {
+            // Arrange
+            const updateUser = {
+                _id: 1,
+                email: 'testUser@email.com',
+                password: 'testPass',
+                workouts: [{
+                    exercises: [{
+                        name: "Squat",
+                        reps: 10,
+                        sets: 3,
+                        weight: 60
+                    }, {
+                        name: "Bench",
+                        reps: 10,
+                        sets: 4,
+                        weight: 50
+                    }
+                    ]
+
+                }]
+            }
+
+            let mockReq = {
+                body: { existingUser: existingUser, workoutDetails: testWorkout }  
+        };
+            userServices.addWorkout.resolves(updateUser);
+            // Act
+            await userController.addWorkout(mockReq, res);
+            // Assert
+            expect(res.status.calledWith(201)).to.be.true;
+            expect(
+                res.json.calledWith(updateUser)
+        ).to.be.true;
+        });
+    });
+
+    it("should not an incomplete workout to a user", async () => {
+        let existingUser = { 
+                email: 'testUser@email.com', password: 'testPass' ,
+        };
+        // Arrange
+        const updateUser = {
+            _id: 1,
+            email: 'testUser@email.com',
+            password: 'testPass',
+            workouts: []
+        }
+
+        const incompleteWorkout = {
+            exercises: [{
+                name: "Squat",
+                sets: 3,
+                weight: 60
+            }]
+        };
+
+        let mockReq = {
+            body: { existingUser: existingUser, workoutDetails: incompleteWorkout }  
+    };
+
+        userServices.addWorkout.resolves(updateUser);
+        // Act
+        await userController.addWorkout(mockReq, res);
+        // Assert
+        expect(
+            res.json.calledWith({
+                message: "Unable to add the workout",
+            })
+        ).to.be.true;
+
+
+    });
+
+
+    it("should return 400 if body is null", async () => {
+        // Arrange
+        let mockReq = { body: null };
+        // Act
+        await userController.addWorkout(mockReq, res);
+        // Assert
+        expect(res.status.calledWith(400)).to.be.true;
+        expect(
+            res.json.calledWith({
+                message: "Invalid Details",
+            })
+        ).to.be.true;
+    });
+
+    it("should return 400 if body is empty", async () => {
+        // Arrange
+        let mockReq = { body: {} };
+        // Act
+        await userController.addWorkout(mockReq, res);
+        // Assert
+        expect(res.status.calledWith(400)).to.be.true;
+        expect(
+            res.json.calledWith({
+                message: "Invalid Details",
+            })
+        ).to.be.true;
+            
+    });
+    
     
 });
+    
+
+    

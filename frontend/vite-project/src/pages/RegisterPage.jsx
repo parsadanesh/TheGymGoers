@@ -11,7 +11,6 @@ const RegisterPage = (props) => {
 
     useEffect(() => {
         if (email !== "" || password !== "") {
-            console.log(email);
             props.setNewUser({
                 email: email,
                 password: password

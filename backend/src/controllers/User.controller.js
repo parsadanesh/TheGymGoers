@@ -40,13 +40,15 @@ export default class UserController {
         const InvalidError = new Error("Invalid Details");
         try {
         
-            if (!(Object.keys(req.body).length > 0)) throw InvalidError;
+            if (req.body === null || !(Object.keys(req.body).length > 0)) throw InvalidError;
             const updatedUser = await this.#service.addWorkout(req.body.existingUser, req.body.workoutDetails);
+
             if (!updatedUser || !(updatedUser.workouts.length > 0)) {
                 throw Error("Could not add workout")
             }
             res.status(201).json(updatedUser);
         } catch (e) {
+
             if (e.message === InvalidError.message) {
                 return res.status(400).json({ message: e.message });
             }
@@ -58,8 +60,7 @@ export default class UserController {
 
     getWorkouts = async (req, res) => {
         try {
-            
-            // res.status(200).json({ message: JSON.stringify("hi") });
+            // const email = req.body;
             const email = req.query.email;
             const workouts = await this.#service.getWorkouts(email);
             // console.log(workouts);

@@ -14,19 +14,18 @@ const WeightTraining = (props) => {
 
     const submitExercise = (e) => {
         e.preventDefault();
-
-        props.setWeightTraining({
-            name: props.selectedOptionText,
-            reps: repRef,
-            sets: setRef,
-            weight: weightRef
+        if (props.selectedOptionText && repRef && setRef && weightRef) {
+            props.setWeightTraining({
+                name: props.selectedOptionText,
+                reps: repRef,
+                sets: setRef,
+                weight: weightRef
+            });
         }
-        );
-
+        setSetRef("");
+        setRepRef("");
+        setWeightRef("");
     }
-
-
-    // create some hooks from the exercise object
 
     return (
         <form onSubmit={submitExercise}>

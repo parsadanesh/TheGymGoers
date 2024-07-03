@@ -17,6 +17,7 @@ const UserDetailsForm = (props) => {
         <div style={{ marginBottom: '20px' }}>
             <label htmlFor="email" style={{ marginRight: '10px' }}>Email: </label>
             <input
+              data-testid="email"
               type="email"
               name="email"
               id="email"
@@ -28,6 +29,7 @@ const UserDetailsForm = (props) => {
           <div style={{ marginBottom: '20px' }}>
             <label htmlFor="password" style={{ marginRight: '10px' }}>Password: </label>
             <input
+              data-testid="password"
               type="password"
               name="password"
               id="password"
