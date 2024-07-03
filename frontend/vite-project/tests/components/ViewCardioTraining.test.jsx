@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 // import userEvent from "@testing-library/user-event";
-import ViewCardioTraining from "../../src/components/viewCardioTraining.jsx";
+import ViewCardioTraining from "../../src/components/ViewCardioTraining.jsx";
 
 import testData from "../sampleUsers.js";
 import ViewWorkout from "../../src/pages/ViewWorkouts.jsx";
