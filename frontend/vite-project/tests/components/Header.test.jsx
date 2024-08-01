@@ -41,10 +41,10 @@ describe('Header Component', () => {
     );
 
     // Dashboard, Log workout, View workout, GymGroups, and Log Out should be present
-    expect(getByText('Dashboard')).toBeInTheDocument();
+    
     expect(getByText('Log workout')).toBeInTheDocument();
     expect(getByText('View workout')).toBeInTheDocument();
-    expect(getByText('GymGroups')).toBeInTheDocument();
+    
     expect(getByText('Log Out')).toBeInTheDocument();
   });
 });

@@ -15,6 +15,8 @@ const RegisterPage = (props) => {
                 email: email,
                 password: password
             })
+            setEmail("");
+            setPassword("");
         }
     }, [email, password])
 
@@ -22,8 +24,9 @@ const RegisterPage = (props) => {
     return (
         <div className="container">
             <h1>Register</h1>
-            <br/>
+            <br />
             <UserDetailsForm setEmail={setEmail} setPassword={setPassword} />
+            {props.registrationMessage && <div className="alert alert-success" role="alert">{props.registrationMessage}</div>}
         </div>
     )
 

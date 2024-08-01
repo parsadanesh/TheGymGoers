@@ -5,12 +5,13 @@ import supertest from "supertest";
 import Config from "../../src/config/Config.js";
 import Database from "../../src/db/Database.js";
 import Server from "../../src/server/Server.js";
-import User from "../../src/models/User.model.js";
+import User from "../../src/models/user.model.js";
 import UserController from "../../src/controllers/User.controller.js";
 import UserRoutes from "../../src/routes/User.routes.js";
 import UserService from "../../src/service/User.services.js";
 
 import testData from "../data/sampleUsers.js"
+import GymGroupController from "../../src/controllers/GymGroups.controller.js";
 const { testUsers, newUser, testWorkouts }  = testData;
 
 describe("Integration Tests", () => {
@@ -22,7 +23,8 @@ describe("Integration Tests", () => {
         Config.load();
         const { PORT, HOST, DB_URI } = process.env;
         const userController = new UserController();
-        const userRoutes = new UserRoutes(userController);
+        const gymGroupController = new GymGroupController();
+        const userRoutes = new UserRoutes(userController, gymGroupController);
         database = new Database(DB_URI);
         await database.connect();
         userServer = new Server(PORT, HOST, userRoutes);
@@ -36,7 +38,6 @@ describe("Integration Tests", () => {
     })
 
     beforeEach(async () => {
-
         try {
             await User.deleteMany();
             console.log("Database cleared");
@@ -103,16 +104,23 @@ describe("Integration Tests", () => {
 
     describe("GET request to /viewWorkouts on UserRoutes", () => {
         it.skip("Should retrieve all of a users workouts", async () => {
-            // console.log(testUsers[1]);
-            const response = await request.get("/viewWorkouts", { params: testUsers[1] });   
-
-            // console.log(JSON.stringify(response.body));
-
-            // console.log(response.body[0]);
+            const response = await request.get("/viewWorkouts", { params: testUsers[1] });   ;
             expect(response.status).to.equal(200);
             expect(response.body.length).greaterThan(0);
+        })
+    })
 
-            // expect(response.message).to.equal("Workout")
+    describe("POST req to create group", () => {
+        it.only("Should create a new group with valid details", async () => {
+            const tempGroup = {
+                name: "test Group",
+                admin: "test-email3@domain.com"
+            };
+            const user = { email: "test-email3@domain.com" };
+            
+            const response = await request.post("/createGroup").send({params: { user: user, newGroup: tempGroup } });
+
+            expect(response.status).to.equal(201);
         })
     })
 })

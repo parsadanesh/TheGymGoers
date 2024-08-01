@@ -14,7 +14,7 @@ export default class UserController {
             const newUser = await this.#service.addUser(req.body);
             if (!newUser._id) {
                 throw new Error("Unable to create account");
-            }
+            };
             res.status(201).json(newUser);
         } catch (e) {
             if (e.message === InvalidError.message) {
@@ -36,19 +36,17 @@ export default class UserController {
         }
     }
 
+    // Takes the the array of exercises and creates, saves and returns a workout model. 
     addWorkout = async (req, res) => {
         const InvalidError = new Error("Invalid Details");
         try {
-        
             if (req.body === null || !(Object.keys(req.body).length > 0)) throw InvalidError;
             const updatedUser = await this.#service.addWorkout(req.body.existingUser, req.body.workoutDetails);
-
             if (!updatedUser || !(updatedUser.workouts.length > 0)) {
                 throw Error("Could not add workout")
-            }
+            };
             res.status(201).json(updatedUser);
         } catch (e) {
-
             if (e.message === InvalidError.message) {
                 return res.status(400).json({ message: e.message });
             }
@@ -60,15 +58,31 @@ export default class UserController {
 
     getWorkouts = async (req, res) => {
         try {
-            // const email = req.body;
             const email = req.query.email;
             const workouts = await this.#service.getWorkouts(email);
-            // console.log(workouts);
             res.status(200).json(workouts);
-            
         } catch (e) {
             res.status(500).json({message: e.message })
-            
+        }
+    }
+
+    deleteExercise = async (req, res) => {
+        const InvalidError = new Error("Invalid Details");
+        console.log(req.query.exercise_id);
+        try {
+            if (req.query === null || !(Object.keys(req.query).length > 0)) throw InvalidError;
+            const updatedUser = await this.#service.deleteExercise(req.query.email, req.query.exercise_id);
+            if (!updatedUser || !(updatedUser.workouts.length > 0)) {
+                throw Error("Could not add workout")
+            };
+            res.status(201).json(updatedUser);
+        } catch (e) {
+            if (e.message === InvalidError.message) {
+                return res.status(400).json({ message: e.message });
+            };
+            res.status(500).json({
+                message: `Unable to add the workout`
+            });
         }
     }
 }

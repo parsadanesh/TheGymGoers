@@ -13,6 +13,7 @@ describe("UserController", () => {
     beforeEach(() => {
         req = {
             body: { email: 'testUser@email.com', password: 'testPass' },
+            query: {}
         };
 
         res = {
@@ -25,7 +26,8 @@ describe("UserController", () => {
             addUser: sinon.stub(),
             login: sinon.stub(),
             addWorkout: sinon.stub(),
-            getWorkouts: sinon.stub()
+            getWorkouts: sinon.stub(),
+            deleteExercise: sinon.stub()
         };
         userController = new UserController(userServices)
 
@@ -96,6 +98,23 @@ describe("UserController", () => {
             expect(res.status.calledWith(200)).to.be.true;
             // expect(res.status.calledWith(200)).to.be.true;
             // expect(res.json.calledWith(existingUser)).to.be.true;
+        });
+
+        it("should not login a user with invalid details", async () => {
+            // Arrange
+            const req = { body: { email: "invalidUser@email.com", password: "wrongPass" } };
+            const res = {
+                status: sinon.stub().returnsThis(),
+                send: sinon.stub()
+            };
+            userServices.login.rejects(new Error("Invalid login details")); // Simulate service rejecting the login attempt
+
+            // Act
+            await userController.login(req, res);
+
+            // Assert
+            expect(res.status.calledWith(400)).to.be.true;
+            expect(res.send.calledWithMatch({ message: "Unable to login with these details" })).to.be.true;
         });
 
     });
@@ -224,9 +243,132 @@ describe("UserController", () => {
         ).to.be.true;
             
     });
+
+    describe("get workout controller tests", () => {
+        it("should successfully retrieve workouts", async () => {
+            // Arrange
+            req.query.email = "user@example.com";
+            const mockWorkouts = [{ id: 1, name: "Workout 1" }];
+            userServices.getWorkouts.resolves(mockWorkouts);
+
+            // Act
+            await userController.getWorkouts(req, res);
+
+            // Assert
+            expect(res.status.calledWith(200)).to.be.true;
+            expect(res.json.calledWith(mockWorkouts)).to.be.true;
+        });
+
+        it("should return 200 with an empty array when no workouts are found", async () => {
+            // Arrange
+            req.query.email = "user@example.com";
+            userServices.getWorkouts.resolves([]);
+
+            // Act
+            await userController.getWorkouts(req, res);
+
+            // Assert
+            expect(res.status.calledWith(200)).to.be.true;
+            expect(res.json.calledWith([])).to.be.true;
+        });
+
+        it("should handle errors thrown by the service", async () => {
+            // Arrange
+            req.query.email = "user@example.com";
+            userServices.getWorkouts.rejects(new Error("Service error"));
+
+            // Act
+            await userController.getWorkouts(req, res);
+
+            // Assert
+            expect(res.status.calledWith(500)).to.be.true;
+            expect(res.json.calledWithMatch({ message: "Service error" })).to.be.true;
+        });
+    });
+
+    describe("delete exercise controller", () => {
+        const mockUpdatedUser = {
+            email: "user@example.com",
+            workouts: [
+                {
+                    exercises: [
+                        {
+                            name: "Incline DB Chest Press",
+                            reps: 2,
+                            sets: 2,
+                            weight: 25,
+                            duration: "30s",
+                            _id: "6685d142697809a09a6e4437"
+                        },
+                        {
+                            name: "Incline Barbell Chest Press",
+                            reps: 2,
+                            sets: 2,
+                            weight: 25,
+                            duration: "45s",
+                            _id: "6685d142697809a09a6e4438"
+                        }
+                    ],
+                    _id: "6685d142697809a09a6e4436",
+                    dateCreated: new Date("2024-07-03T22:31:30.225Z")
+                }
+            ]
+        };
+        it("should successfully delete an exercise", async () => {
+            // Arrange
+            req.query.email = "user@example.com";
+            req.query.exercise_id = "exercise123";
+            userServices.deleteExercise.resolves(mockUpdatedUser);
+
+            // Act
+            await userController.deleteExercise(req, res);
+
+            // Assert
+            expect(res.status.calledWith(201)).to.be.true;
+            expect(res.json.calledWith(mockUpdatedUser)).to.be.true;
+        });
+
+        it("should return 400 for invalid query parameters", async () => {
+            // Arrange
+            req.query = {}; // No query parameters
+
+            // Act
+            await userController.deleteExercise(req, res);
+
+            // Assert
+            expect(res.status.calledWith(400)).to.be.true;
+            expect(res.json.calledWithMatch({ message: "Invalid Details" })).to.be.true;
+        });
+
+        it("should return 500 when deletion fails", async () => {
+            // Arrange
+            req.query.email = "user@example.com";
+            req.query.exercise_id = "nonexistentExercise";
+            userServices.deleteExercise.rejects(new Error("Could not add workout"));
+
+            // Act
+            await userController.deleteExercise(req, res);
+
+            // Assert
+            expect(res.status.calledWith(500)).to.be.true;
+            expect(res.json.calledWithMatch({ message: "Unable to add the workout" })).to.be.true;
+        });
+
+        it("should handle errors thrown by the service", async () => {
+            // Arrange
+            req.query.email = "user@example.com";
+            req.query.exercise_id = "exercise123";
+            userServices.deleteExercise.rejects(new Error("Service error"));
+
+            // Act
+            await userController.deleteExercise(req, res);
+
+            // Assert
+            expect(res.status.calledWith(500)).to.be.true;
+
+        });
+        
+    });
     
     
 });
-    
-
-    

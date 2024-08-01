@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react"
-import LoginPage from "../pages/LoginPage";
-import RegisterPage from "../pages/RegisterPage";
+import { useState, useEffect } from "react";
 import CardioTraining from "./CardioTraining";
 import WeightTraining from "./WeightTraining";
 import axios from "axios";
@@ -42,26 +40,20 @@ const WorkoutForm = (props) => {
 
     useEffect(() => {
         if (weightTraining.name || weightTraining.reps || weightTraining.sets || weightTraining.weight) {
-            // arr.push(weightTraining);
             setExercises(prevWorkout => [...prevWorkout, weightTraining]);
         }
-
     }, [weightTraining]);
 
     useEffect(() => {
         if (cardioTraining.name || weightTraining.duration ) {
-            // arr.push(weightTraining);
             setExercises(prevWorkout => [...prevWorkout, cardioTraining]);
         }
-
     }, [cardioTraining]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setWorkout({ exercises: exercises });
-
         setSuccessMessage('Your workout has been successfully submitted!');
-        
         setTimeout(() => {
             setSuccessMessage('');
         }, 3000);
@@ -69,10 +61,7 @@ const WorkoutForm = (props) => {
     }
 
     useEffect(() => {
-        logWorkout();
-
- 
-        
+        workout.exercises.length>0 && logWorkout();
     }, [workout])
 
     const handleExerciseChange = (e) => {

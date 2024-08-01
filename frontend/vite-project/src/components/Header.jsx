@@ -1,11 +1,17 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import React, { useState } from 'react';
 
 const Header = (props) => {
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
 
     const toggle = () => setIsOpen(!isOpen);
+
+    const handleLogout = () => {
+        props.setLoggedIn(false);
+        navigate("login");
+    }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-dark">
@@ -26,9 +32,6 @@ const Header = (props) => {
                 }
                 {props.loggedIn &&
                     <ul className="navbar-nav">
-                        <li className="nav-item active">
-                            <Link className="nav-link fw-bold text-success" to="/">Dashboard<span className="sr-only"></span></Link>
-                        </li>
                         <li className="nav-item">
                             <Link className="nav-link fw-bold text-success" to="/log">Log workout</Link>
                         </li>
@@ -36,11 +39,12 @@ const Header = (props) => {
                             <Link className="nav-link fw-bold text-success" to="/viewWorkouts">View workout</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link fw-bold text-success" to="/">GymGroups</Link>
+                            <Link className="nav-link fw-bold text-success" to="/gymGroups">GymGroups</Link>
                         </li>
-                        <li className="nav-item" onClick={() => props.setLoggedIn(false)}>
+                        <li className="nav-item" onClick={handleLogout}>
                             <span className="nav-link fw-bold text-success" style={{ cursor: 'pointer' }}>Log Out</span>
                         </li>
+                        
                     </ul>
                 }
             </div>

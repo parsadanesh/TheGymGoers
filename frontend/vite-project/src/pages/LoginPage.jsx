@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import UserDetailsForm from "../components/UserDetailsForm"
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import UserDetailsForm from "../components/UserDetailsForm";
 
 const LoginPage = (props) => {
 
@@ -14,6 +12,8 @@ const LoginPage = (props) => {
                 email: email,
                 password: password
             })
+            setEmail("");
+            setPassword("");
         }
     }, [email, password])
 
@@ -23,6 +23,7 @@ const LoginPage = (props) => {
             <h1>Login</h1>
             <br/>
             <UserDetailsForm setEmail={setEmail} setPassword={setPassword} />
+            {props.registrationMessage && <div className="alert alert-success" role="alert">{props.registrationMessage}</div>}
         </div>
     )
 }

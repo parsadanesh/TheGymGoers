@@ -14,10 +14,8 @@ const CardioTraining = (props) => {
                 duration: durationRef
             });
         }
-        setDurationRef("")
-
+        setDurationRef("");
     }
-
 
     return (
         <form onSubmit={submitExercise}>

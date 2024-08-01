@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useRef } from "react";
 
 const UserDetailsForm = (props) => {
