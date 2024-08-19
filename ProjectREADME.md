@@ -66,3 +66,11 @@ on a Mac
 2) type npm run test
 3) in another terminal go to the directory TheGymGoers/backend
 4) type npm test
+
+## Architecture
+
+The application follows a three-tier architecture:
+
+1) Frontend: Built using React for an interactive user interface.
+2) Backend: Developed with Node.js and Express to handle API requests and server-side logic.
+3) Database: MongoDB Atlas is used for secure data storage, managing user details, workout logs, and group information.
